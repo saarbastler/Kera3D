@@ -77,12 +77,3 @@ module abstandshalterXMotor()
     translate([10,34,-1]) cylinder(d=6,h=35);
   }
 }
-
-translate([124,-22-2,0]) rotate([0,0,180]) halterungXMotor();
-translate([138,22+2,0]) halterungZMotor();
-
-halterungYMotor();
-translate([19,-23,0]) halterungXSchlitten();
-translate([19,-23-42,0]) halterungXSchlitten();
-
-%translate([-38,-85,0]) cube([304,300,4]);

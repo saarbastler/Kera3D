@@ -246,7 +246,7 @@ module antriebZ()
 }
 
 antriebZ();
-tisch(z); // 440
+tisch(180); // 440
 translate([0,0,hoehe+profil+10])
 {
   translate([-breite/2-125,-tiefe/2-26,-33]) 
