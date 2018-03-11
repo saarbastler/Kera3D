@@ -4,7 +4,7 @@ $fn=100;
 // X/Y: max 46cm
 // Z: max 50 cm
 
-include <parts.scad>
+include <cnc.scad>
 include <schrauben.scad>
 
 profil= 20;
@@ -31,47 +31,38 @@ module frame(breite, tiefe)
 }
 
 module korpus()
-{
-  *translate([0,0,-profil/2]) frame(breite, tiefe);
-  *translate([0,0,hoehe+profil/2]) frame(breite, tiefe);
-  
-  translate([-breite/2, -tiefe/2-profil, -profil/2])  cube([breite,profil,profil]);
-  translate([-breite/2,  tiefe/2       , -profil/2])  cube([breite,profil,profil]);
-  translate([-breite/2-profil, -tiefe/2, -profil/2])  cube([profil,tiefe,profil]);
-  translate([ breite/2       , -tiefe/2, -profil/2])  cube([profil,tiefe,profil]);
+{ 
+  translate([-breite/2, -tiefe/2-profil/2, 0]) rotate([0,90,0]) aluProfil20x20b(breite);
+  translate([-breite/2,  tiefe/2+profil/2, 0]) rotate([0,90,0]) aluProfil20x20b(breite);
+  translate([-breite/2-profil/2, -tiefe/2, 0]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
+  translate([ breite/2+profil/2, -tiefe/2, 0]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
   
   echo("X-Profil unten", breite);
-  translate([-breite/2-profil, -tiefe/2, -72])  cube([profil,tiefe,profil]);
+  translate([-breite/2-profil/2, -tiefe/2, -72+profil/2]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
   
-  translate([-breite/2-82, -tiefe/2-profil, hoehe+profil/2])  cube([breite+82+profil,profil,profil]);
-  translate([-breite/2-82,  tiefe/2       , hoehe+profil/2])  cube([breite+82+profil,profil,profil]);
-  translate([-breite/2-profil, -tiefe/2, hoehe+profil/2])  cube([profil,tiefe,profil]);
-  translate([ breite/2       , -tiefe/2, hoehe+profil/2])  cube([profil,tiefe,profil]);
+  translate([-breite/2-82, -tiefe/2-profil/2,  hoehe+profil]) rotate([0,90,0]) aluProfil20x20b(breite+82+profil);
+  translate([-breite/2-82,  tiefe/2+profil/2,  hoehe+profil]) rotate([0,90,0]) aluProfil20x20b(breite+82+profil);
+  translate([-breite/2-profil/2, -tiefe/2, hoehe+profil]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
+  translate([ breite/2+profil/2, -tiefe/2, hoehe+profil]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
+  
   echo("X-Profil oben", breite+82+profil);
   echo("Y-Profil", tiefe);
   
-  translate([-breite/2-102, -tiefe/2-50, hoehe+profil/2])  cube([profil,tiefe+50+profil,profil]);
+  translate([-breite/2-102+profil/2, -tiefe/2-50, hoehe+profil]) rotate([-90,0,0]) aluProfil20x20b(tiefe+50+profil);
   echo("Quer-Profil", tiefe+50+profil);
   
-  translate([-breite/2-profil,-tiefe/2-profil,-150])   cube([profil,profil,hoehe+150+profil/2]);
-  translate([-breite/2-profil, tiefe/2       ,-150])   cube([profil,profil,hoehe+150+profil/2]);
-  translate([ breite/2       ,-tiefe/2-profil,-150])   cube([profil,profil,hoehe+150+profil/2]);
-  translate([ breite/2       , tiefe/2       ,-150])   cube([profil,profil,hoehe+150+profil/2]);
+  translate([-breite/2-profil/2,-tiefe/2-profil/2,-150])   aluProfil20x20b(hoehe+150+profil/2);
+  translate([-breite/2-profil/2, tiefe/2+profil/2,-150])   aluProfil20x20b(hoehe+150+profil/2);
+  translate([ breite/2+profil/2,-tiefe/2-profil/2,-150])   aluProfil20x20b(hoehe+150+profil/2);
+  translate([ breite/2+profil/2, tiefe/2+profil/2,-150])   aluProfil20x20b(hoehe+150+profil/2);
+  
   
   echo("Z-Profil", hoehe+150+profil/2);
 }
 
 module platteX()
 {
-  color("silver") difference()
-  {
-    translate([-114/2,-40/2,0]) cube([114,40,4]);
-    
-    translate([-37.5,0,-1]) cylinder(d=5,h=17);
-    translate([ 37.5,0,-1]) cylinder(d=5,h=17);
-    translate([-37.5,0,-18]) sbr12uuLoecher();
-    translate([ 37.5,0,-18]) sbr12uuLoecher();
-  }
+  color("silver") halterungXSchlitten();
   
   translate([ 13+6.5-114/2,14+6-20, 5]) frad();
   translate([-13-6.5+114/2,14+6-20, 5]) frad();
@@ -86,7 +77,7 @@ module zWinkel()
   {
     difference()
     {
-      cube([20, 72,4]);
+      translate([-1,0,0]) cube([21, 72,4]);
       
       translate([-.5,0,0])
       {
@@ -96,38 +87,15 @@ module zWinkel()
       }
     }
     
-    translate([20,0,4-30]) cube([4,72,30]);
+    translate([20,0,4-40]) cube([4,72,40]);
   }
-}
-
-module stepperLoecher()
-{
-  translate([ 31/2, 31/2, 0]) children();
-  translate([ 31/2,-31/2, 0]) children();
-  translate([-31/2, 31/2, 0]) children();
-  translate([-31/2,-31/2, 0]) children();
 }
 
 module platteY()
 {
   translate([1.5, -1, 0]) 
   {
-    color("silver") difference()
-    {
-      translate([-38,0,0]) cube([75+38,72,4]);
-    
-      translate([7.5, 8,-1]) wj200umLoecher();
-      translate([7.5,40+ 8,-1]) wj200umLoecher();
-
-      translate([68, 8,-1]) wj200umLoecher();      
-      translate([68,40+ 8,-1]) wj200umLoecher();
-      
-      translate([-18, 72/2,-1]) stepperLoecher()
-      {
-        cylinder(d=3,h=10);
-      }
-
-    }
+    color("silver") halterungYMotor();
     
     translate([1.5+58,0,4]) zWinkel();
     translate([110, 72/2,-70]) cylinder(d=30,h=100);
@@ -257,17 +225,11 @@ module antriebZ()
     hdt3m9_40();
     translate([0,0,-64]) Stepper();
     
-    translate([0,0,-4]) difference()
-    {
-      translate([-60,-22,0]) cube([38+44,44,3]);
-      
-      translate([0,0,-1]) cylinder(d=26,h=5);
-      
-      translate([ 31/2, 31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([ 31/2,-31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([-31/2, 31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([-31/2,-31/2,-1]) cylinder(d=3,h=11,$fn=100);
-    }
+    stepperLoecher() translate([0,0,2]) rotate([180,0,0]) M3(8);
+    translate([0,0,-4]) halterungZMotor();
+    
+    translate([-50, 10-22,-1]) rotate([180,0,0]) M6(8);
+    translate([-50,-10+22,-1]) rotate([180,0,0]) M6(8);
   }
 
   zlen=1374;
@@ -293,21 +255,19 @@ translate([0,0,hoehe+profil+10])
     translate([0,0,63]) hdt3m9_14();
     
     *translate([30,-20,33]) cube([1,1,27]);
-    translate([0,0,60]) difference()
-    {
-      translate([-22,-22,0]) cube([66,44,3]);
-      
-      translate([0,0,-1]) cylinder(d=26,h=5);
-      
-      translate([ 31/2, 31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([ 31/2,-31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([-31/2, 31/2,-1]) cylinder(d=3,h=11,$fn=100);
-      translate([-31/2,-31/2,-1]) cylinder(d=3,h=11,$fn=100);
-    }
+    
+    translate([0,0,60]) halterungXMotor();
+    translate([23,-22,33.]) abstandshalterXMotor();
+    
+    stepperLoecher() translate([0,0,66]) rotate([180,0,0]) M3(8);
+    
+    translate([33,-12,63]) rotate([180,0,0]) M6(35);
+    translate([33, 12,63]) rotate([180,0,0]) M6(35);
   }
 
   translate([-80,0,0]) XYEinheit(x, y);
 }
+
 korpus();
 
 
