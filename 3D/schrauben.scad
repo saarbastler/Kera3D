@@ -93,6 +93,21 @@ module M3Mutter()
   }
 }
 
+module M4( laenge )
+{
+  color("silver")
+  {
+    difference()
+    {
+      cylinder(d=6.8,h=4,$fn=100);  
+    
+      translate([0,0,-1]) cylinder( d= 4, h=2.8, $fn=6 );
+    }
+    translate([0,0,3])cylinder(d=4,h=laenge,$fn=100);
+  }
+}
+
+
 module M5( length )
 {
   color("silver")
@@ -145,6 +160,24 @@ module M6Mutter()
       cylinder(d=11.3, h= 4.8, $fn=6);
       
       translate([0,0,-1]) cylinder(d=6, h=6, $fn=100);
+    }
+  }
+}
+
+
+module M5DIN1991(length=10)
+{
+  color("silver")
+  {
+    difference()
+    {
+      union()
+      {
+        cylinder(d1=10, d2=5, h=2.3);
+        cylinder(d=5,h=length);
+      }
+      
+      translate([0,0,-1]) cylinder(d=3.5,h=3.3,$fn=6);
     }
   }
 }
