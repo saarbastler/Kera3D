@@ -23,19 +23,19 @@ module boden()
 
 module frame(breite, tiefe)
 {
-  translate([-breite/2,-tiefe/2-profil,0]) cube([breite,profil,profil]);
-  translate([-breite/2, tiefe/2,0])        cube([breite,profil,profil]);
+  translate([-breite/2,-tiefe/2-profil/2,profil/2]) rotate([0,90,0]) aluProfil20x20b(breite);
+  translate([-breite/2, tiefe/2+profil/2,profil/2]) rotate([0,90,0]) aluProfil20x20b(breite);
 
-  translate([-breite/2-profil,-tiefe/2-profil,0])        cube([profil,tiefe+2*profil,profil]);
-  translate([ breite/2,-tiefe/2-profil,0])               cube([profil,tiefe+2*profil,profil]);
+  translate([-breite/2-profil/2,-tiefe/2-profil,profil/2]) rotate([-90,0,0]) aluProfil20x20b(tiefe+2*profil);
+  translate([ breite/2+profil/2,-tiefe/2-profil,profil/2]) rotate([-90,0,0]) aluProfil20x20b(tiefe+2*profil);
 }
 
 module korpus()
 { 
-  translate([-breite/2, -tiefe/2-profil/2, 0]) rotate([0,90,0]) aluProfil20x20b(breite);
-  translate([-breite/2,  tiefe/2+profil/2, 0]) rotate([0,90,0]) aluProfil20x20b(breite);
-  translate([-breite/2-profil/2, -tiefe/2, 0]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
-  translate([ breite/2+profil/2, -tiefe/2, 0]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
+  translate([-breite/2, -tiefe/2-profil/2, -10]) rotate([0,90,0]) aluProfil20x20b(breite);
+  translate([-breite/2,  tiefe/2+profil/2, -10]) rotate([0,90,0]) aluProfil20x20b(breite);
+  translate([-breite/2-profil/2, -tiefe/2, -10]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
+  translate([ breite/2+profil/2, -tiefe/2, -10]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
   
   echo("X-Profil unten", breite);
   translate([-breite/2-profil/2, -tiefe/2, -72+profil/2]) rotate([-90,0,0]) aluProfil20x20b(tiefe);
@@ -64,11 +64,34 @@ module platteX()
 {
   color("silver") halterungXSchlitten();
   
-  translate([ 13+6.5-114/2,14+6-20, 5]) frad();
-  translate([-13-6.5+114/2,14+6-20, 5]) frad();
+  translate([ 13+6.5-114/2,14+6-20, 5+2.5]) frad();
+  translate([-13-6.5+114/2,14+6-20, 5+2.5]) frad();
 
-  translate([ 0, 4, 49]) frad();
-  translate([ 0, 4, 0])  cylinder(d=5,h=60);
+  translate([ 0, 8, 49]) frad();
+  translate([ 0, 8, 0])  M5(75);
+  translate([ 0, 8, 30])  M5Mutter();
+  translate([ 0, 8, 45.5])  M5Mutter();
+  translate([ 0, 8, 60.5])  M5Mutter();
+  translate([ 0,-8, 0])  M5(10);
+  
+  translate([0, 8, 5.4]) gewindeplatteM5();
+  translate([0,-8, 5.4]) gewindeplatteM5();
+  
+  translate([-37.5,0,4]) sbr12uuChildren() rotate([180,0,0]) M5DIN1991(12);
+  translate([ 37.5,0,4]) sbr12uuChildren() rotate([180,0,0]) M5DIN1991(12);
+  
+  translate([-37.5,0,0]) 
+  {
+    M5DIN1991(25);
+    translate([0,0,4]) M5Mutter();
+    translate([0,0,19]) M5Mutter();
+  }
+  translate([ 37.5,0,0]) 
+  {
+    M5DIN1991(25);
+    translate([0,0,4]) M5Mutter();
+    translate([0,0,19]) M5Mutter();
+  }
 }
 
 module zWinkel()
@@ -100,19 +123,26 @@ module platteY()
     translate([1.5+58,0,4]) zWinkel();
     translate([110, 72/2,-70]) cylinder(d=30,h=100);
     
-    translate([ 20, 72/2-15, 6]) frad();
-    translate([ 20, 72/2+15, 6]) frad();
+    translate([ 20, 72/2-15, 0])  M5DIN1991(25);
+    translate([ 20, 72/2-15,4]) M5Mutter();
+    translate([ 20, 72/2-15, 8]) frad();
+    translate([ 20, 72/2-15,20]) M5Mutter();
     
-    translate([-18,72/2,28]) 
+    translate([ 20, 72/2+15, 0])  M5DIN1991(25);
+    translate([ 20, 72/2+15,4]) M5Mutter();
+    translate([ 20, 72/2+15, 6]) frad();
+    translate([ 20, 72/2+15,20]) M5Mutter();
+    
+    translate([-18,72/2,28+2]) 
     {
-      translate([0,0,63]) rotate([180,0,0]) Stepper();
+      translate([0,0,64]) rotate([180,0,0]) Stepper();
       rotate([180,0,0]) hdt3m9_14();
     
-      translate([0,0,-31]) stepperLoecher() M3(35);
+      translate([0,0,-31-2]) stepperLoecher() M3(35);
       
-      translate([ 0, 0,-24]) stepperLoecher() difference()
+      translate([ 0, 0,-24-2]) stepperLoecher() difference()
       {
-        cylinder(d=5,h=27);
+        cylinder(d=5,h=30);
         
         translate([0,0,-1]) cylinder(d=3,h=30);
       }
@@ -122,7 +152,7 @@ module platteY()
 
 module zahnriemenx(x)
 {
-  color("blue") translate([-breite/2-32, -tiefe/2-20, 41.5])
+  color("blue") translate([-breite/2-32, -tiefe/2-20, 44])
   {    
     translate([-8,0,0]) cube([x+70,2,9]);    
     translate([x+62+8,10,0]) cube([2, tiefe+20,9]);
@@ -137,7 +167,7 @@ module zahnriemenx(x)
 
 module zahnriemeny(x,y)
 {
-  color("green") translate([x-breite/2+58, -tiefe/2, 85.5])
+  color("green") translate([x-breite/2+58, -tiefe/2, 85.5+2])
   {    
     translate([0,-5,0]) cube([2,30+y,9]); 
 
@@ -149,10 +179,36 @@ module zahnriemeny(x,y)
   }
 }
 
+module sbs12schrauben(len=600)
+{
+  for(i=[0:100:len-100])
+    translate([i-len/2+50,0,8])
+    {    
+      translate([0,-11.5,-1]) rotate([180,0,0]) M3(30);
+      translate([0, 11.5,-1]) rotate([180,0,0]) M3(30);
+    }
+}
+
 module XYEinheit(x = 0, y= 0)
 {
-  translate([0,-tiefe/2-10,0]) sbs12();
-  translate([0, tiefe/2+10,0]) sbs12();
+  translate([0,-tiefe/2-10,0]) 
+  {
+    sbs12();
+    sbs12schrauben();
+    
+    for(i=[0:100:500])
+      translate([i-250,0,-26]) sbs12Gegenstueck();
+  }
+  
+  translate([0, tiefe/2+10,0])
+  {
+    sbs12();
+    sbs12schrauben();
+    
+    for(i=[0:100:500])
+      translate([i-250,0,-26]) sbs12Gegenstueck();
+  }
+
   translate([x-270,-0,0])
   {
     translate([0,-tiefe/2-10,0])
@@ -170,16 +226,16 @@ module XYEinheit(x = 0, y= 0)
       translate([37.5,0,35.5]) rotate([0,0,180]) platteX();
     }
     
-    translate([-38.2/2+114/2,0,39.5]) wsx1040(530);
+    translate([-39/2+114/2,0,39.5]) wsx1040(530);
     translate([0,y-25,0]) union()
     {
-      translate([18,-190,69.5]) wj200um();
-      translate([18,-190+40,69.5]) wj200um();
+      translate([17.5,-190,69.5]) wj200um();
+      translate([17.5,-190+40,69.5]) wj200um();
 
-      translate([58,-190,69.5]) rotate([0,0,180]) wj200um();
-      translate([58,-190+40,69.5]) rotate([0,0,180]) wj200um();
+      translate([57.5,-190,69.5]) rotate([0,0,180]) wj200um();
+      translate([57.5,-190+40,69.5]) rotate([0,0,180]) wj200um();
       
-      translate([-1,-190-15,78.5]) platteY();
+      translate([-1.5,-190-15,78.5]) platteY();
     }
   }
   
@@ -188,15 +244,31 @@ module XYEinheit(x = 0, y= 0)
   zahnriemeny(x,y);
 }
 
+module linearZ(z)
+{
+  translate([4+24,0,-30]) color("silver") cylinder(d=8,h=550);
+  translate([4+24,0,z+24]) rotate([-90,0,0]) lm8uu();
+  translate([4+24,0,z+12]) tischHalterZ();
+  translate([4+24,0,z+12]) tischHalterZGegenstueck();
+  translate([4+24-8,-8,-20]) 
+  { 
+    wellenHalter();
+    translate([26, 23,10]) rotate([0,90,0]) M6(10);
+    translate([26, -7,10]) rotate([0,90,0]) M6(10);
+  }
+  translate([4+24-8,-8,490]) wellenHalter();
+}
+
 module tisch( z = 0)
 {
-  translate([-tischBreite/2-19,0,-22.85-4]) spindel();   
-  translate([-tischBreite/2-19,0,  4.15-4]) rotate([180,0,0]) flb20();
+  *translate([-280,-200,500]) rotate([180,0,0]) endSwitch();
+  translate([-tischBreite/2-19,0,-22.85-4-10]) spindel();   
+  translate([-tischBreite/2-19,0,  4.15-4-10]) rotate([180,0,0]) flb20();
   translate([-tischBreite/2-19,0,  500]) rotate([180,0,0]) llb20();
-  translate([-tischBreite/2-19,0,  -16.5]) rotate([180,0,0]) hdt3m9_20(8);
+  translate([-tischBreite/2-19,0,  -16.5-10]) rotate([180,0,0]) hdt3m9_20(8);
   
-  translate([ tischBreite/2+19,0,-22.85-4]) spindel(); 
-  translate([ tischBreite/2+19,0,  4.15-4]) rotate([180,0,180]) flb20();
+  translate([ tischBreite/2+19,0,-22.85-4-10]) spindel(); 
+  translate([ tischBreite/2+19,0,  4.15-4-10]) rotate([180,0,180]) flb20();
   translate([ tischBreite/2+19,0,  500]) rotate([180,0,180]) llb20();
   translate([ tischBreite/2+19,0,  -16.5]) rotate([180,0,0]) hdt3m9_20(8);
   
@@ -205,12 +277,21 @@ module tisch( z = 0)
     translate([-tischBreite/2-19,0,profil/2]) rotate([0,0,-90]) trapezgewindemutter (); 
     translate([ tischBreite/2+19,0,profil/2]) rotate([0,0, 90]) trapezgewindemutter (); 
   
-    frame(tischBreite-2*profil, tischTiefe-2*profil);
+    frame(tischBreite-2*profil-3, tischTiefe-2*profil);
     echo("Tisch-X", tischBreite-2*profil);
     echo("Tisch-Y", tischTiefe);
     
+    translate([ tischBreite/2-22, 20,profil/2]) rotate([0, 90,0]) M6(40);
+    translate([ tischBreite/2-22,-20,profil/2]) rotate([0, 90,0]) M6(40);
+    translate([-tischBreite/2+22, 20,profil/2]) rotate([0,-90,0]) M6(40);
+    translate([-tischBreite/2+22,-20,profil/2]) rotate([0,-90,0]) M6(40);
     color("SaddleBrown") translate([-tischBreite/2,-tischTiefe/2,profil]) cube([tischBreite, tischTiefe,5]);
   }
+  
+  translate([ tischBreite/2-1.5, 60,0]) linearZ(z);
+  translate([ tischBreite/2-1.5,-60,0]) linearZ(z);
+  translate([-tischBreite/2+1.5, 60,0]) rotate([0,0,180]) linearZ(z);
+  translate([-tischBreite/2+1.5,-60,0]) rotate([0,0,180]) linearZ(z);
 }
 
 //$t= 0.99;
@@ -246,10 +327,10 @@ module antriebZ()
 }
 
 antriebZ();
-tisch(180); // 440
+tisch(200); // 445
 translate([0,0,hoehe+profil+10])
 {
-  translate([-breite/2-125,-tiefe/2-26,-33]) 
+  translate([-breite/2-125,-tiefe/2-26,-33+2.5]) 
   {
     Stepper();
     translate([0,0,63]) hdt3m9_14();
@@ -257,12 +338,12 @@ translate([0,0,hoehe+profil+10])
     *translate([30,-20,33]) cube([1,1,27]);
     
     translate([0,0,60]) halterungXMotor();
-    translate([23,-22,33.]) abstandshalterXMotor();
+    translate([23,-22,33-2.5]) abstandshalterXMotor();
     
     stepperLoecher() translate([0,0,66]) rotate([180,0,0]) M3(8);
     
-    translate([33,-12,63]) rotate([180,0,0]) M6(35);
-    translate([33, 12,63]) rotate([180,0,0]) M6(35);
+    translate([33,-12,65]) rotate([180,0,0]) M6(39);
+    translate([33, 12,65]) rotate([180,0,0]) M6(39);
   }
 
   translate([-80,0,0]) XYEinheit(x, y);
@@ -271,3 +352,6 @@ translate([0,0,hoehe+profil+10])
 korpus();
 
 
+*#translate([-breite/2, -tiefe/2-profil, -150])  cube([10,10,130]);
+*#translate([-breite/2, -tiefe/2-profil, 0])  cube([10,10,500]);
+*#translate([-breite/2-profil, -tiefe/2, -150])  cube([10,10,78]);
