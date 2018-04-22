@@ -534,4 +534,12 @@ module endSwitch()
   rotate([-90,0,0]) cylinder( d= 4.8, h= 3.2, $fn= 100);
 }
 
+module uProfil(len=50)
+{
+  translate([-22.5/2,0,0]) cube([22.5,len,1.5]);
+  translate([-22.5/2,0,0]) cube([1.5,len,10]);
+  translate([ 22.5/2-1.5,0,0]) cube([1.5,len,10]);
+}
+
+
 

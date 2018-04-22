@@ -67,11 +67,17 @@ module platteX()
   translate([ 13+6.5-114/2,14+6-20, 5+2.5]) frad();
   translate([-13-6.5+114/2,14+6-20, 5+2.5]) frad();
 
-  translate([ 0, 8, 49]) frad();
-  translate([ 0, 8, 0])  M5(75);
-  translate([ 0, 8, 30])  M5Mutter();
-  translate([ 0, 8, 45.5])  M5Mutter();
-  translate([ 0, 8, 60.5])  M5Mutter();
+  translate([-51/2,-20,34.5]) umlenkungY();
+  
+  translate([-51/2+5.5,-30,34]) rotate([90,0,0]) M6Mutter();
+  translate([ 51/2-5.5,-30,34]) rotate([90,0,0]) M6Mutter();
+    
+  translate([ 0, -25, 49]) frad();
+  translate([ 0, -25, 45.5])  M5Mutter();
+  translate([ 0, -25, 60.5])  M5Mutter();
+  translate([ 0, -25, 28.5]) M5(40);
+  
+  translate([ 0, 8, 0])  M5(10);
   translate([ 0,-8, 0])  M5(10);
   
   translate([0, 8, 5.4]) gewindeplatteM5();
@@ -130,7 +136,7 @@ module platteY()
     
     translate([ 20, 72/2+15, 0])  M5DIN1991(25);
     translate([ 20, 72/2+15,4]) M5Mutter();
-    translate([ 20, 72/2+15, 6]) frad();
+    translate([ 20, 72/2+15, 8]) frad();
     translate([ 20, 72/2+15,20]) M5Mutter();
     
     translate([-18,72/2,28+2]) 
@@ -147,6 +153,10 @@ module platteY()
         translate([0,0,-1]) cylinder(d=3,h=30);
       }
     }
+    
+    zahnriehmenHalterY();
+    translate([42,20,15.5]) rotate([90,0,90]) zahnriehmenGegenstueck();
+    translate([42,50,15.5]) rotate([90,0,90]) zahnriehmenGegenstueck();
   }
 }
 
@@ -169,13 +179,13 @@ module zahnriemeny(x,y)
 {
   color("green") translate([x-breite/2+58, -tiefe/2, 85.5+2])
   {    
-    translate([0,-5,0]) cube([2,30+y,9]); 
+    translate([0,-35,0]) cube([2,60+y,9]); 
 
     translate([-46, 32+y,0]) cube([39,2,9]);
     translate([-46, 46+y,0]) cube([39,2,9]);
     
-    translate([0,55+y,0]) cube([2,tiefe-y-50,9]); 
-    translate([17,-5,0]) cube([2,tiefe+10,9]); 
+    translate([0,55+y,0]) cube([2,tiefe-y-20,9]); 
+    translate([17,-35,0]) cube([2,tiefe+70,9]); 
   }
 }
 
@@ -239,9 +249,64 @@ module XYEinheit(x = 0, y= 0)
     }
   }
   
-  translate([breite/2+50, -26-tiefe/2, 40.5]) frad();
+  translate([breite/2+50, -26-tiefe/2, 40.5+2.5]) frad();
+  translate([breite/2+50, -26-tiefe/2, -20]) umlenkungX();
+  translate([breite/2+50, -26-tiefe/2, -25]) cylinder(d=5,h=90);
+  translate([breite/2+50, -26-tiefe/2, -24]) M5Mutter();
+  translate([breite/2+50, -26-tiefe/2, 8]) M5Mutter();
+  translate([breite/2+0, -20-tiefe/2, 0]) stopper();
+  
+  translate([breite/2+50, -10-tiefe/2, 8]) rotate([180,0,0]) M6(12);
+  translate([breite/2+50+10, -27.5-tiefe/2, -10]) rotate([-90,0,0]) M6(12);
+  translate([breite/2+50-10, -27.5-tiefe/2, -10]) rotate([-90,0,0]) M6(12);
+  
+  translate([-breite/2-22, tiefe/2-18, 0]) zahnriehmenHalterX1();
+  
+  translate([-breite/2-12, tiefe/2+2, 8]) rotate([180,0,0]) M6(12);
+  translate([-breite/2-12, tiefe/2-12, 8]) rotate([180,0,0]) M6(12);
+  
+  translate([-breite/2-12, tiefe/2+22, 48.5]) rotate([90,0,0]) zahnriehmenGegenstueck();
+  
+  translate([ breite/2+50, tiefe/2+0, 0]) zahnriehmenHalterX2();
+  
+  translate([ breite/2+54, tiefe/2+10, 8]) rotate([0,180,0]) M6(12);
+  translate([ breite/2+54+32, tiefe/2+10, 8]) rotate([0,180,0]) M6(12);
+  
+  translate([ breite/2+54+16, tiefe/2+22, 48.5]) rotate([90,0,0]) zahnriehmenGegenstueck();
+  
   zahnriemenx(x);
   zahnriemeny(x,y);
+}
+
+module umlenkungY2()
+{
+  difference()
+  {
+    rotate([0,90,-90]) uProfil(51);
+    
+    translate([51/2,-4.3,-12]) cylinder(d=5.5,h=30);
+    
+    translate([5.5,-2,-.5]) rotate([-90,0,0]) cylinder(d=6.0,h=3);
+    translate([45.5,-2,-.5]) rotate([-90,0,0]) cylinder(d=6.0,h=3);
+  }
+}
+
+module umlenkungY()
+{
+  difference()
+  {
+    union()
+    {
+      translate([0,-10,-6]) cube([51,10,11]);
+      translate([11,0,-3.75]) cube([29,15,8.75]);
+    }
+    
+    translate([51/2,-5,-11]) cylinder(d=5.5, h=20);
+    *translate([51/2,-5,-11]) cylinder(d=11, h=6.5);
+    
+    translate([5.5,-18,-.5]) rotate([-90,0,0]) cylinder(d=6.0,h=20);
+    translate([45.5,-18,-.5]) rotate([-90,0,0]) cylinder(d=6.0,h=20);
+  }
 }
 
 module linearZ(z)
@@ -298,7 +363,7 @@ module tisch( z = 0)
 x= ($t < 0.66) ? $t * 1.5 * 470: (1-$t) * 3 * 470;
 y= ($t < 0.33) ? $t * 3 * 380 : ($t < 0.66) ? (.66-$t) * 3 * 380 : 0;
 z= ($t < 0.5) ?  $t * 2 * 440 : (1-$t) * 2 * 440;
-
+//x= 470;
 module antriebZ()
 {
   translate([-tischBreite/2-19+9, -tiefe/2+30,  -48]) 
